@@ -4,28 +4,18 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+
   workflow_dispatch:  # Permite disparar o workflow manualmente
 
 jobs:
-  build:
+  CI:
     runs-on: ubuntu-latest  # Ambiente Ubuntu mais recente
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2  # Faz o checkout do repositório
 
-      - name: List files in src for debugging
-        run: ls -al src  # Lista os arquivos no diretório 'src' para verificar se o 'package.json' está lá
-
-      - name: Install Dependencies
-        run: |
-          cd src  # Navega até a pasta 'src'
-          npm install  # Instala as dependências do projeto
-
-      - name: Run Tests
-        run: |
-          cd src  # Navega até a pasta 'src' (se necessário)
-          npm test  # Ou outro comando que você use para rodar os testes
+      - name: Setup do NodeJS
+        uses: actions/setup-node@v3.0.0
+        with:
+          node version: 16.13.2
