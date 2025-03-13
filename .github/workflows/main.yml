@@ -1,0 +1,45 @@
+name: CI/CD Pipeline
+
+# Definindo o evento que vai disparar o workflow (por exemplo, push na branch main)
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Definindo os jobs que o workflow vai executar
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Definindo o sistema operacional da máquina de execução
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2  # Faz o checkout do código do repositório
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Versão do Node.js para usar
+
+      - name: Install Dependencies
+        run: npm install  # Instalando as dependências
+
+      - name: Run Tests
+        run: npm test  # Executando os testes
+
+  deploy:
+    runs-on: ubuntu-latest  # Também roda em uma máquina Ubuntu
+
+    needs: build  # Só roda após o job 'build' ser concluído com sucesso
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy Application
+        run: |
+          echo "Deploying application..."
+          # Adicione aqui os comandos para o seu deploy, como por exemplo:
+          # scp, rsync ou outros comandos de deploy
